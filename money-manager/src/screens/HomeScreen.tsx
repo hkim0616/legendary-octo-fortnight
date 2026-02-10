@@ -1,11 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import CardSwiper from '../components/CardSwiper';
+
+type TabParamList = {
+  '홈': undefined;
+  '퀴즈': undefined;
+  '단어장': undefined;
+  '마이페이지': undefined;
+};
 
 export default function HomeScreen() {
+  const navigation = useNavigation<BottomTabNavigationProp<TabParamList, '홈'>>();
+
+  const handleStartQuiz = () => {
+    navigation.navigate('퀴즈');
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>홈</Text>
-      <Text style={styles.subtitle}>Money Manager에 오신 것을 환영합니다</Text>
+      <CardSwiper onStartQuiz={handleStartQuiz} />
     </View>
   );
 }
@@ -14,16 +29,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
   },
 });
