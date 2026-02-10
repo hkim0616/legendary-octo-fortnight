@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,6 +14,11 @@ import QuizTimer from '../components/QuizTimer';
 import OXQuestion from '../components/OXQuestion';
 import MultipleChoiceQuestion from '../components/MultipleChoiceQuestion';
 import QuizResult from '../components/QuizResult';
+import {
+  recordQuizPass,
+  recordQuizStats,
+  awardBadges,
+} from '../store/streakStore';
 
 type TabParamList = {
   '홈': undefined;
@@ -30,6 +35,7 @@ type AnswerState = {
 
 const TIMER_DURATION = 10;
 const QUESTION_COUNT = 3;
+const PASS_THRESHOLD = 2; // 3문제 중 2문제 이상 정답 시 통과
 
 export default function QuizScreen() {
   const navigation = useNavigation<BottomTabNavigationProp<TabParamList, '퀴즈'>>();
@@ -42,6 +48,14 @@ export default function QuizScreen() {
   const [quizFinished, setQuizFinished] = useState(false);
   const [timerKey, setTimerKey] = useState(0);
 
+  // Streak/badge result state
+  const [passed, setPassed] = useState(false);
+  const [streakDays, setStreakDays] = useState(0);
+  const [newBadgeIds, setNewBadgeIds] = useState<number[]>([]);
+
+  // Track correctly answered cardIds during the quiz
+  const correctCardIds = useRef<number[]>([]);
+
   const currentQuestion = questions[currentIndex];
 
   const startQuiz = useCallback(() => {
@@ -53,9 +67,13 @@ export default function QuizScreen() {
     setQuizFinished(false);
     setQuizStarted(true);
     setTimerKey((prev) => prev + 1);
+    setPassed(false);
+    setStreakDays(0);
+    setNewBadgeIds([]);
+    correctCardIds.current = [];
   }, []);
 
-  // Reset quiz when tab is focused
+  // Reset quiz when leaving tab
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
       setQuizStarted(false);
@@ -70,9 +88,14 @@ export default function QuizScreen() {
       setAnswerState(newState);
       if (isCorrect) {
         setCorrectCount((prev) => prev + 1);
+        // Track which card topic was answered correctly
+        const q = questions[currentIndex];
+        if (q) {
+          correctCardIds.current.push(q.cardId);
+        }
       }
     },
-    []
+    [questions, currentIndex]
   );
 
   const handleOXAnswer = useCallback(
@@ -94,10 +117,33 @@ export default function QuizScreen() {
   );
 
   const handleTimeUp = useCallback(() => {
-    if (answerState) return; // already answered
-    // Time's up = wrong, show as no selection
+    if (answerState) return;
     setAnswerState({ isCorrect: false, selectedOX: null, selectedIndex: null });
   }, [answerState]);
+
+  // Finalize quiz: record streak, badges, stats
+  const finalizeQuiz = useCallback(
+    async (finalCorrectCount: number) => {
+      const didPass = finalCorrectCount >= PASS_THRESHOLD;
+      setPassed(didPass);
+
+      // Record stats always
+      await recordQuizStats(finalCorrectCount, QUESTION_COUNT);
+
+      // Award badges for correctly answered topics
+      if (correctCardIds.current.length > 0) {
+        const newly = await awardBadges(correctCardIds.current);
+        setNewBadgeIds(newly);
+      }
+
+      // Record streak only if passed
+      if (didPass) {
+        const streakData = await recordQuizPass();
+        setStreakDays(streakData.currentStreak);
+      }
+    },
+    []
+  );
 
   const handleNext = useCallback(() => {
     if (currentIndex < questions.length - 1) {
@@ -105,9 +151,15 @@ export default function QuizScreen() {
       setAnswerState(null);
       setTimerKey((prev) => prev + 1);
     } else {
+      // Calculate final count: current correctCount + whether this last answer was correct
+      const finalCount =
+        answerState?.isCorrect && correctCount === currentIndex
+          ? correctCount // already incremented by handleAnswer
+          : correctCount;
       setQuizFinished(true);
+      finalizeQuiz(finalCount);
     }
-  }, [currentIndex, questions.length]);
+  }, [currentIndex, questions.length, answerState, correctCount, finalizeQuiz]);
 
   const handleGoToCard = useCallback(() => {
     navigation.navigate('홈');
@@ -122,7 +174,8 @@ export default function QuizScreen() {
         <Text style={styles.introDesc}>
           오늘 학습한 카드에서 무작위 {QUESTION_COUNT}문항이 출제됩니다.{'\n'}
           OX 퀴즈와 4지선다가 섞여 나와요!{'\n'}
-          문항당 {TIMER_DURATION}초 안에 답해야 합니다.
+          문항당 {TIMER_DURATION}초 안에 답해야 합니다.{'\n\n'}
+          {PASS_THRESHOLD}문제 이상 맞히면 오늘의 학습이 인정됩니다!
         </Text>
         <TouchableOpacity style={styles.startButton} onPress={startQuiz} activeOpacity={0.8}>
           <Text style={styles.startButtonText}>퀴즈 시작하기</Text>
@@ -138,6 +191,9 @@ export default function QuizScreen() {
         <QuizResult
           correctCount={correctCount}
           totalCount={questions.length}
+          passed={passed}
+          newBadgeIds={newBadgeIds}
+          streakDays={streakDays}
           onRetry={startQuiz}
           onGoHome={handleGoToCard}
         />
@@ -212,7 +268,6 @@ export default function QuizScreen() {
               </View>
             )}
 
-            {/* Explanation (shown on correct) */}
             {answerState.isCorrect && (
               <View style={styles.explanationBox}>
                 <Text style={styles.explanationLabel}>해설</Text>
@@ -222,7 +277,6 @@ export default function QuizScreen() {
               </View>
             )}
 
-            {/* "Go back to card" button (shown on wrong / time up) */}
             {!answerState.isCorrect && (
               <TouchableOpacity
                 style={styles.reviewButton}
@@ -233,7 +287,6 @@ export default function QuizScreen() {
               </TouchableOpacity>
             )}
 
-            {/* Next button */}
             <TouchableOpacity
               style={styles.nextButton}
               onPress={handleNext}
@@ -255,7 +308,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  // Intro
   introContainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -291,7 +343,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  // Header
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -308,14 +359,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#888',
   },
-  // Content
   content: {
     flex: 1,
   },
   contentInner: {
     paddingBottom: 40,
   },
-  // Feedback
   feedback: {
     paddingHorizontal: 20,
     paddingTop: 24,
