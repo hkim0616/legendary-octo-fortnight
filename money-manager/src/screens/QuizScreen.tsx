@@ -19,6 +19,8 @@ import {
   recordQuizStats,
   awardBadges,
 } from '../store/streakStore';
+import { saveTermsByCardIds } from '../store/vocabularyStore';
+import terms from '../data/terms';
 
 type TabParamList = {
   '홈': undefined;
@@ -134,6 +136,9 @@ export default function QuizScreen() {
       if (correctCardIds.current.length > 0) {
         const newly = await awardBadges(correctCardIds.current);
         setNewBadgeIds(newly);
+
+        // Auto-save related terms to vocabulary
+        await saveTermsByCardIds(correctCardIds.current, terms);
       }
 
       // Record streak only if passed

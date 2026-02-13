@@ -163,6 +163,8 @@ export async function recordQuizStats(
 
 // ─── Reset (for dev/testing) ─────────────────────────────
 
+const VOCAB_KEY = '@money_manager/vocabulary';
+
 export async function resetAll(): Promise<void> {
-  await AsyncStorage.multiRemove([STREAK_KEY, BADGE_KEY, STATS_KEY]);
+  await AsyncStorage.multiRemove([STREAK_KEY, BADGE_KEY, STATS_KEY, VOCAB_KEY]);
 }
