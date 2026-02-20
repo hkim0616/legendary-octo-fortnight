@@ -189,12 +189,183 @@ const questions: Question[] = [
     answerIndex: 1,
     explanation: '단기, 중기, 장기로 나누어 구체적인 금융 목표를 설정하는 것이 좋습니다.',
   },
+  // ── Part 2: 사회 초년생을 위한 상품지식 및 재테크 기초 ──
+
+  // Card 11 - 연금저축보험 vs 펀드
+  {
+    type: 'ox',
+    cardId: 11,
+    question: '연금저축보험은 원금 보장이 되지만 수익률이 높다.',
+    answer: false,
+    explanation: '연금저축보험은 원금 보장이 되지만 수익률이 낮고 사업비를 떼서 초기에 마이너스가 날 수 있습니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 11,
+    question: '투자 기간이 긴 사회 초년생에게 더 유리한 연금저축 상품은?',
+    options: ['연금저축보험', '연금저축펀드', '일반 예금', '적금'],
+    answerIndex: 1,
+    explanation: '투자 기간이 길다면 직접 ETF를 골라 운용하는 연금저축펀드가 복리 효과에 훨씬 유리합니다.',
+  },
+
+  // Card 12 - 파킹 통장
+  {
+    type: 'ox',
+    cardId: 12,
+    question: '파킹 통장은 돈을 맡기면 하루치 이자를 받을 수 있다.',
+    answer: true,
+    explanation: '파킹 통장은 차를 잠시 주차하듯 돈을 맡겨도 하루치 이자를 쳐주는 고금리 통장입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 12,
+    question: '파킹 통장의 가장 큰 장점은?',
+    options: ['높은 고정 금리', '입출금 자유 + 높은 이자', '세금 면제', '해외 송금 무료'],
+    answerIndex: 1,
+    explanation: '파킹 통장은 언제든 입출금이 가능하면서도 일반 통장보다 훨씬 높은 이자를 제공합니다.',
+  },
+
+  // Card 13 - 주택청약
+  {
+    type: 'ox',
+    cardId: 13,
+    question: '주택청약통장은 해지하면 쌓아온 가입 기간이 유지된다.',
+    answer: false,
+    explanation: '한 번 해지하면 쌓아온 가입 기간이 모두 사라집니다. 급전이 필요하면 청약담보대출을 활용하세요.',
+  },
+  {
+    type: 'multiple',
+    cardId: 13,
+    question: '공공분양 청약 시 매달 납입 인정 한도 금액은?',
+    options: ['2만 원', '5만 원', '10만 원', '50만 원'],
+    answerIndex: 2,
+    explanation: '공공분양을 노린다면 매달 10만 원(인정 한도) 이상 넣는 것이 정석입니다.',
+  },
+
+  // Card 14 - 전세자금대출
+  {
+    type: 'ox',
+    cardId: 14,
+    question: '전세자금대출의 이자가 월세보다 비싼 경우가 대부분이다.',
+    answer: false,
+    explanation: '전세자금대출 이자가 월세보다 싼 경우가 많으며, 특히 청년 전용 상품은 이자가 매우 낮습니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 14,
+    question: '전세 계약 시 보증금을 지키기 위해 반드시 확인해야 할 것은?',
+    options: ['인테리어 상태', '확정일자와 대항력', '주변 맛집', '건물 연식'],
+    answerIndex: 1,
+    explanation: '확정일자와 대항력 확인은 내 소중한 전세 보증금을 지키기 위한 필수 절차입니다.',
+  },
+
+  // Card 15 - 공모주 청약
+  {
+    type: 'ox',
+    cardId: 15,
+    question: '공모주 청약에서 균등 배정을 활용하면 소액으로도 참여할 수 있다.',
+    answer: true,
+    explanation: '균등 배정을 활용하면 최소 수량만 신청해서 소액으로도 1~2주를 받아 수익을 노릴 수 있습니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 15,
+    question: '공모주 청약 시 수익 가능성이 높은 종목을 고르는 팁은?',
+    options: ['회사 이름이 긴 종목', '기관 경쟁률이 높은 종목', '공모가가 가장 낮은 종목', '상장일이 빠른 종목'],
+    answerIndex: 1,
+    explanation: '기관 경쟁률이 높은 종목은 시장의 관심이 높다는 의미로, 상장 후 주가 상승 가능성이 높습니다.',
+  },
+
+  // Card 16 - LTV / DTI / DSR
+  {
+    type: 'ox',
+    cardId: 16,
+    question: 'DSR은 주택 담보 대출만 고려해서 한도를 계산한다.',
+    answer: false,
+    explanation: 'DSR은 주택 담보 대출뿐 아니라 학자금 대출, 카드론 등 모든 빚을 따져 한도를 결정합니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 16,
+    question: '집값 대비 대출 한도를 결정하는 지표는?',
+    options: ['DTI', 'DSR', 'LTV', 'GDP'],
+    answerIndex: 2,
+    explanation: 'LTV(Loan To Value)는 담보 가치(집값) 대비 대출 가능 비율을 의미합니다.',
+  },
+
+  // Card 17 - 손익통산
+  {
+    type: 'ox',
+    cardId: 17,
+    question: 'ISA 계좌에서는 수익과 손실을 합산해서 순이익에만 세금을 낸다.',
+    answer: true,
+    explanation: 'ISA 계좌에서는 손익통산이 적용되어 번 돈과 잃은 돈을 합쳐 실제 순이익에 대해서만 과세합니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 17,
+    question: '해외 주식 투자 시 연간 비과세 공제 한도는?',
+    options: ['100만 원', '250만 원', '500만 원', '1,000만 원'],
+    answerIndex: 1,
+    explanation: '해외 주식 양도소득은 연간 250만 원까지 기본 공제가 적용됩니다.',
+  },
+
+  // Card 18 - 과세이연
+  {
+    type: 'ox',
+    cardId: 18,
+    question: '과세이연은 세금을 영원히 면제해주는 것이다.',
+    answer: false,
+    explanation: '과세이연은 세금을 면제가 아닌 미래로 미뤄주는 것입니다. 연금 수령 시 세금을 납부합니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 18,
+    question: '과세이연의 가장 큰 장점은?',
+    options: ['세금 완전 면제', '미뤄진 세금으로 재투자해 복리 효과 극대화', '원금 보장', '높은 이자율'],
+    answerIndex: 1,
+    explanation: '세금으로 나갈 돈이 계좌에 남아 계속 재투자되어 복리의 마법을 더 크게 만들어줍니다.',
+  },
+
+  // Card 19 - 신용점수 관리법
+  {
+    type: 'ox',
+    cardId: 19,
+    question: '신용점수는 올리기는 쉽지만 떨어지기는 어렵다.',
+    answer: false,
+    explanation: '신용점수는 떨어지기는 쉬워도 올리기는 어렵습니다. 연체는 단 하루도 하지 않는 것이 중요합니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 19,
+    question: '사회 초년생이 신용점수를 올리는 가장 좋은 방법은?',
+    options: ['대출을 많이 받기', '카드를 만들지 않기', '주거래 은행 이용 + 공과금 꾸준히 납부', '현금만 사용하기'],
+    answerIndex: 2,
+    explanation: '주거래 은행을 꾸준히 이용하고 공과금을 잘 납부하는 것만으로도 신용점수를 올릴 수 있습니다.',
+  },
+
+  // Card 20 - 달러 투자
+  {
+    type: 'ox',
+    cardId: 20,
+    question: '경제가 어려워질 때 달러 가치는 보통 하락한다.',
+    answer: false,
+    explanation: '달러는 세계 기축통화로, 경제가 어려워질 때 안전자산 선호로 오히려 가치가 상승하는 경향이 있습니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 20,
+    question: '자산의 일부를 달러로 보유하는 가장 큰 이유는?',
+    options: ['높은 이자 수익', '통화 분산으로 경제 위기 방어', '환전 수수료 절약', '해외여행 준비'],
+    answerIndex: 1,
+    explanation: '원화만으로 자산을 보유하면 한국 경제 위기 시 위험합니다. 달러 분산은 훌륭한 자산 보험입니다.',
+  },
 ];
 
-/** 카드 10장에서 무작위로 3문항을 뽑되, OX와 객관식을 섞는다 */
+/** 카드 20장에서 무작위로 3문항을 뽑되, OX와 객관식을 섞는다 */
 export function pickRandomQuestions(count: number = 3): Question[] {
   // 카드 ID를 셔플해서 count개 선택
-  const cardIds = Array.from({ length: 10 }, (_, i) => i + 1);
+  const cardIds = Array.from({ length: 20 }, (_, i) => i + 1);
   for (let i = cardIds.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [cardIds[i], cardIds[j]] = [cardIds[j], cardIds[i]];

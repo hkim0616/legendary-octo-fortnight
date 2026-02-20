@@ -243,6 +243,208 @@ const terms: Term[] = [
     difficulty: 'advanced',
     topic: 'investment',
   },
+
+  // ── Part 2: 사회 초년생을 위한 상품지식 및 재테크 기초 ──
+
+  // Card 11 - 연금저축보험 vs 펀드
+  {
+    id: 21,
+    cardId: 11,
+    term: '연금저축펀드',
+    definition: '연금저축 계좌에서 직접 ETF나 펀드를 골라 투자할 수 있는 상품으로, 수익률은 높지만 원금 보장이 되지 않습니다.',
+    example: 'S&P500 ETF를 연금저축펀드 계좌에서 매월 30만원씩 적립 매수',
+    difficulty: 'intermediate',
+    topic: 'retirement',
+  },
+  {
+    id: 22,
+    cardId: 11,
+    term: '계좌이전 제도',
+    definition: '연금저축보험에서 연금저축펀드로, 또는 그 반대로 계좌를 옮길 수 있는 제도입니다. 세액공제 혜택은 유지됩니다.',
+    example: '수익률이 낮은 보험사 연금저축을 증권사 연금저축펀드로 이전',
+    difficulty: 'intermediate',
+    topic: 'retirement',
+  },
+
+  // Card 12 - 파킹 통장
+  {
+    id: 23,
+    cardId: 12,
+    term: '파킹 통장',
+    definition: '하루만 맡겨도 이자가 붙는 수시입출금식 고금리 통장으로, 비상금이나 단기 자금 보관에 최적입니다.',
+    example: '토스뱅크 통장에 500만원을 넣어두면 매일 이자 발생',
+    difficulty: 'beginner',
+    topic: 'savings',
+  },
+  {
+    id: 24,
+    cardId: 12,
+    term: '예금자 보호',
+    definition: '금융기관이 파산해도 1인당 최대 5,000만원까지 예금보험공사가 원금과 이자를 보장해주는 제도입니다.',
+    example: '한 은행에 5,000만원 이상은 다른 은행으로 분산 예치',
+    difficulty: 'beginner',
+    topic: 'savings',
+  },
+
+  // Card 13 - 주택청약
+  {
+    id: 25,
+    cardId: 13,
+    term: '주택청약종합저축',
+    definition: '새 아파트 분양 자격을 얻기 위한 필수 저축 상품으로, 가입 기간과 납입 횟수가 당첨 확률에 영향을 줍니다.',
+    example: '매월 10만원씩 주택청약 통장에 자동이체 설정',
+    difficulty: 'beginner',
+    topic: 'savings',
+  },
+  {
+    id: 26,
+    cardId: 13,
+    term: '청약담보대출',
+    definition: '주택청약 통장 잔액을 담보로 받을 수 있는 대출로, 청약 가입 기간이 길수록 한도가 높아집니다.',
+    example: '청약 통장에 1,000만원 있으면 해당 금액의 90%까지 대출 가능',
+    difficulty: 'intermediate',
+    topic: 'credit',
+  },
+
+  // Card 14 - 전세자금대출
+  {
+    id: 27,
+    cardId: 14,
+    term: '전세자금대출',
+    definition: '전세 보증금의 일부를 은행에서 빌려주는 대출 상품으로, 월세보다 주거비를 절약할 수 있습니다.',
+    example: '전세 2억 중 1억 6천만원을 연 3% 전세대출로 이용',
+    difficulty: 'beginner',
+    topic: 'credit',
+  },
+  {
+    id: 28,
+    cardId: 14,
+    term: '확정일자',
+    definition: '주민센터에서 임대차계약서에 받는 날짜 도장으로, 전세보증금을 법적으로 보호받기 위한 필수 절차입니다.',
+    example: '이사 당일 전입신고 + 확정일자를 받아야 대항력 발생',
+    difficulty: 'intermediate',
+    topic: 'credit',
+  },
+
+  // Card 15 - 공모주 청약
+  {
+    id: 29,
+    cardId: 15,
+    term: '공모주 청약',
+    definition: '기업이 처음 주식시장에 상장할 때 일반 투자자가 미리 주식을 신청하여 받는 투자 방법입니다.',
+    example: '카카오뱅크 상장 시 증거금 50만원으로 공모주 청약 신청',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 30,
+    cardId: 15,
+    term: '균등 배정',
+    definition: '공모주 청약 시 최소 증거금만 넣어도 동일한 수량의 주식을 배정받는 방식입니다.',
+    example: '증거금 10만원이든 1억이든 균등 배정분은 동일하게 1주 배정',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+
+  // Card 16 - LTV / DTI / DSR
+  {
+    id: 31,
+    cardId: 16,
+    term: 'LTV',
+    definition: 'Loan To Value의 약자로, 담보 가치 대비 대출 비율을 의미합니다. 집값의 몇 %까지 대출이 가능한지를 나타냅니다.',
+    example: 'LTV 70%이면 5억짜리 집을 담보로 최대 3.5억 대출 가능',
+    difficulty: 'intermediate',
+    topic: 'credit',
+  },
+  {
+    id: 32,
+    cardId: 16,
+    term: 'DSR',
+    definition: 'Debt Service Ratio의 약자로, 연소득 대비 모든 대출의 연간 원리금 상환액 비율입니다. 대출 한도의 핵심 기준입니다.',
+    example: '연봉 5,000만원, DSR 40%이면 연간 원리금 상환 최대 2,000만원',
+    difficulty: 'advanced',
+    topic: 'credit',
+  },
+
+  // Card 17 - 손익통산
+  {
+    id: 33,
+    cardId: 17,
+    term: '손익통산',
+    definition: '투자에서 발생한 이익과 손실을 합산하여 실제 순이익에 대해서만 세금을 부과하는 원리입니다.',
+    example: 'A주식에서 500만원 이익, B주식에서 300만원 손실 → 200만원에만 과세',
+    difficulty: 'intermediate',
+    topic: 'tax',
+  },
+  {
+    id: 34,
+    cardId: 17,
+    term: 'ISA',
+    definition: '개인종합자산관리계좌로, 하나의 계좌에서 예금·펀드·주식 등을 운용하며 손익통산과 비과세 혜택을 받을 수 있습니다.',
+    example: 'ISA 계좌에서 200만원까지 비과세, 초과분은 9.9% 분리과세',
+    difficulty: 'advanced',
+    topic: 'tax',
+  },
+
+  // Card 18 - 과세이연
+  {
+    id: 35,
+    cardId: 18,
+    term: '과세이연',
+    definition: '연금 계좌에서 발생한 수익에 대한 세금 납부를 인출 시점까지 미루는 것으로, 그동안 세금 없이 복리 효과를 누릴 수 있습니다.',
+    example: '연금저축에서 ETF 매매 차익이 나도 인출 전까지 세금 0원',
+    difficulty: 'advanced',
+    topic: 'tax',
+  },
+  {
+    id: 36,
+    cardId: 18,
+    term: '세액공제',
+    definition: '계산된 세금에서 일정 금액을 직접 빼주는 제도입니다. 소득공제와 달리 세금 자체를 줄여줍니다.',
+    example: '연금저축 400만원 납입 시 최대 66만원 세액공제(16.5%)',
+    difficulty: 'intermediate',
+    topic: 'tax',
+  },
+
+  // Card 19 - 신용점수 관리법
+  {
+    id: 37,
+    cardId: 19,
+    term: '주거래 은행',
+    definition: '급여 이체, 자동이체, 카드 결제 등을 집중하여 거래 실적을 쌓는 은행으로, 우대 금리 등 혜택을 받을 수 있습니다.',
+    example: '급여 통장을 한 은행으로 모아 신용점수와 우대 혜택 확보',
+    difficulty: 'beginner',
+    topic: 'credit',
+  },
+  {
+    id: 38,
+    cardId: 19,
+    term: '신용카드 이용률',
+    definition: '신용카드 한도 대비 실제 사용 금액의 비율로, 30% 이하를 유지하는 것이 신용점수에 유리합니다.',
+    example: '한도 500만원 카드는 월 150만원 이하로 사용 권장',
+    difficulty: 'intermediate',
+    topic: 'credit',
+  },
+
+  // Card 20 - 달러 투자
+  {
+    id: 39,
+    cardId: 20,
+    term: '달러 예금',
+    definition: '원화를 달러로 환전하여 예금하는 상품으로, 환율 상승 시 환차익까지 기대할 수 있습니다.',
+    example: '환율 1,200원일 때 달러 예금 후 1,400원이 되면 환차익 발생',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 40,
+    cardId: 20,
+    term: '환헤지',
+    definition: '해외 투자 시 환율 변동으로 인한 손실을 방지하기 위한 전략으로, 환헤지 상품은 환율 영향을 줄여줍니다.',
+    example: '환헤지 ETF는 달러 가치가 떨어져도 손실 없이 순수 주가 수익만 반영',
+    difficulty: 'advanced',
+    topic: 'investment',
+  },
 ];
 
 export default terms;
