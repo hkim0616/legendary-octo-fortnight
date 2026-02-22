@@ -150,6 +150,152 @@ const cards: Card[] = [
     emoji: '💵',
     backgroundColor: '#E0F7FA',
   },
+
+  // ── Part 3: 상품지식 및 ETF 실전 ──
+
+  {
+    id: 21,
+    title: 'S&P 500',
+    description: '미국을 대표하는 500대 우량 기업에 한 번에 투자하는 전 세계에서 가장 인기 있는 지수입니다.',
+    emoji: '🇺🇸',
+    backgroundColor: '#E3F2FD',
+  },
+  {
+    id: 22,
+    title: '나스닥 100',
+    description: 'IT, 바이오 등 혁신 기술주 중심의 미국 상위 100개 기업 지수로, 변동성은 크지만 성장성도 높습니다.',
+    emoji: '🚀',
+    backgroundColor: '#E8F5E9',
+  },
+  {
+    id: 23,
+    title: '운용보수 (수수료)',
+    description: '투자 상품 유지 비용으로, 장기 투자 시 수익률에 막대한 영향을 미치는 핵심 체크 요소입니다.',
+    emoji: '💸',
+    backgroundColor: '#FFF3E0',
+  },
+  {
+    id: 24,
+    title: '적립식 투자',
+    description: '일정한 금액을 주기적으로 투자하여 매수 가격을 평준화하고 위험을 분산하는 전략입니다.',
+    emoji: '⏰',
+    backgroundColor: '#F3E5F5',
+  },
+  {
+    id: 25,
+    title: '연금 이전 제도',
+    description: '세제 혜택은 유지하면서 연금 자산을 더 유리한 금융사나 상품으로 이동시키는 제도입니다.',
+    emoji: '📦',
+    backgroundColor: '#FFF8E1',
+  },
+  {
+    id: 26,
+    title: '금 투자',
+    description: '실물 자산으로서 인플레이션과 경제 불확실성에 대비하는 필수 방어 자산입니다.',
+    emoji: '🥇',
+    backgroundColor: '#FFF9C4',
+  },
+  {
+    id: 27,
+    title: '리츠 (REITs)',
+    description: '부동산에 간접 투자하여 임대 수익 등을 배당으로 받는 중위험 중수익 상품입니다.',
+    emoji: '🏢',
+    backgroundColor: '#E0F7FA',
+  },
+  {
+    id: 28,
+    title: '어카운트인포',
+    description: '모든 금융권 계좌를 한눈에 조회하고 숨은 자산을 관리할 수 있는 서비스입니다.',
+    emoji: '🔍',
+    backgroundColor: '#EDE7F6',
+  },
+  {
+    id: 29,
+    title: '예금자 보호 제도',
+    description: '금융사 파산 시 법에 따라 1인당 최대 5,000만 원까지 예치금을 보장해주는 안전 장치입니다.',
+    emoji: '🛡️',
+    backgroundColor: '#E8EAF6',
+  },
+  {
+    id: 30,
+    title: '금융소득종합과세',
+    description: '연간 금융소득이 2,000만 원을 넘을 경우 근로소득 등과 합산해 높은 세율로 과세하는 제도입니다.',
+    emoji: '😮',
+    backgroundColor: '#F1F8E9',
+  },
+
+  // ── Part 4: 보험 기초 및 연말정산 시리즈 ──
+
+  {
+    id: 31,
+    title: '실손의료보험 (실비)',
+    description: '실제 지출한 병원비를 보장받는 가장 실용적이고 필수적인 보험입니다.',
+    emoji: '🏥',
+    backgroundColor: '#FCE4EC',
+  },
+  {
+    id: 32,
+    title: '소득공제 vs 세액공제',
+    description: '세금 부과 대상 소득을 줄이는 소득공제와 결정된 세금을 직접 깎아주는 세액공제의 차이를 알아봅니다.',
+    emoji: '🧾',
+    backgroundColor: '#E3F2FD',
+  },
+  {
+    id: 33,
+    title: '신용카드 25% 룰',
+    description: '총 급여의 25%를 초과하여 지출한 카드 사용금액부터 소득공제 혜택이 시작되는 기준입니다.',
+    emoji: '💳',
+    backgroundColor: '#FBE9E7',
+  },
+  {
+    id: 34,
+    title: '현금영수증',
+    description: '현금 결제 시 번호를 입력하여 신용카드보다 높은 비율(30%)로 소득공제를 받는 방법입니다.',
+    emoji: '🧾',
+    backgroundColor: '#E8F5E9',
+  },
+  {
+    id: 35,
+    title: '해외주식 양도소득세',
+    description: '해외 주식 투자로 연간 250만 원 이상의 순수익을 얻었을 때 내는 22%의 세금입니다.',
+    emoji: '🌐',
+    backgroundColor: '#E0F2F1',
+  },
+  {
+    id: 36,
+    title: '환전 스프레드',
+    description: '통화를 사고팔 때 발생하는 가격 차이로, 실질적인 환전 비용을 의미합니다.',
+    emoji: '💱',
+    backgroundColor: '#FFF3E0',
+  },
+  {
+    id: 37,
+    title: '배당소득세 (15.4%)',
+    description: '배당이나 이자 수익이 발생할 때 국가에서 미리 징수하는 15.4%의 세금입니다.',
+    emoji: '📊',
+    backgroundColor: '#F3E5F5',
+  },
+  {
+    id: 38,
+    title: '반도체 ETF',
+    description: '반도체 설계 및 제조 기업들을 한데 모아 투자하는 섹터 특화 상품입니다.',
+    emoji: '💻',
+    backgroundColor: '#E0F7FA',
+  },
+  {
+    id: 39,
+    title: '레버리지 / 인버스',
+    description: '지수 변동의 배수 수익을 노리거나 역방향으로 투자하는 고위험 상품입니다.',
+    emoji: '⚠️',
+    backgroundColor: '#FFF9C4',
+  },
+  {
+    id: 40,
+    title: '마이너스 통장 (마통)',
+    description: '약정된 한도 내에서 자유롭게 입출금하며 사용하는 대출 상품입니다.',
+    emoji: '📉',
+    backgroundColor: '#FCE4EC',
+  },
 ];
 
 export default cards;

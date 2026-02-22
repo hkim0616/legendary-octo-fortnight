@@ -360,12 +360,356 @@ const questions: Question[] = [
     answerIndex: 1,
     explanation: '원화만으로 자산을 보유하면 한국 경제 위기 시 위험합니다. 달러 분산은 훌륭한 자산 보험입니다.',
   },
+
+  // ── Part 3: 상품지식 및 ETF 실전 ──
+
+  // Card 21 - S&P 500
+  {
+    type: 'ox',
+    cardId: 21,
+    question: 'S&P 500은 미국 나스닥에 상장된 기술주 500개로 구성된 지수이다.',
+    answer: false,
+    explanation: 'S&P 500은 나스닥뿐 아니라 NYSE 등 미국 주식시장 전체의 시가총액 상위 우량 기업 500개로 구성됩니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 21,
+    question: '워런 버핏이 유언으로 아내에게 추천한 투자 방법은?',
+    options: ['개별 주식 투자', 'S&P 500 인덱스 펀드', '부동산 투자', '금 투자'],
+    answerIndex: 1,
+    explanation: '워런 버핏은 "내가 죽으면 S&P 500 인덱스 펀드에 투자하라"고 했을 정도로 검증된 투자처입니다.',
+  },
+
+  // Card 22 - 나스닥 100
+  {
+    type: 'ox',
+    cardId: 22,
+    question: '나스닥 100은 금융주를 포함한 상위 100개 기업으로 구성된 지수이다.',
+    answer: false,
+    explanation: '나스닥 100은 금융주를 제외한 상위 100개 기업으로 구성되며, IT·바이오 등 혁신 기술주 중심입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 22,
+    question: '나스닥 100 지수의 특징으로 가장 적절한 것은?',
+    options: ['안정적이고 변동성이 낮다', '금융주 위주로 구성된다', '기술주 중심으로 변동성은 크지만 성장성이 높다', '미국 이외 국가 기업도 포함한다'],
+    answerIndex: 2,
+    explanation: '나스닥 100은 반도체, AI, 플랫폼 등 혁신 기업이 많아 변동성은 크지만 성장성도 높습니다.',
+  },
+
+  // Card 23 - 운용보수
+  {
+    type: 'ox',
+    cardId: 23,
+    question: 'ETF 운용보수 0.1%와 0.5%의 차이는 장기적으로 무시할 수 있는 수준이다.',
+    answer: false,
+    explanation: '0.4%p의 차이도 10~20년 복리로 쌓이면 수천만 원의 차이를 만들므로 반드시 비교해야 합니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 23,
+    question: '비슷한 지수를 추종하는 ETF를 고를 때 가장 먼저 비교해야 할 것은?',
+    options: ['ETF 이름', '운용보수', '상장 날짜', '거래 시간'],
+    answerIndex: 1,
+    explanation: '비슷한 성과를 내는 ETF라면 운용보수가 낮은 상품을 선택하는 것이 투자의 정석입니다.',
+  },
+
+  // Card 24 - 적립식 투자
+  {
+    type: 'ox',
+    cardId: 24,
+    question: '적립식 투자는 시장의 최저점을 정확히 맞춰 매매하는 방식이다.',
+    answer: false,
+    explanation: '적립식 투자는 타이밍과 관계없이 정기적으로 일정 금액을 투자하여 평균 단가를 낮추는 방식입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 24,
+    question: '적립식 투자(DCA)의 가장 큰 장점은?',
+    options: ['항상 최고 수익 보장', '평균 매수 단가를 낮추고 위험 분산', '세금 면제', '원금 보장'],
+    answerIndex: 1,
+    explanation: '비쌀 때 적게, 쌀 때 많이 사게 되어 평균 매수 단가가 낮아지는 코스트 에버리징 효과가 발생합니다.',
+  },
+
+  // Card 25 - 연금 이전 제도
+  {
+    type: 'ox',
+    cardId: 25,
+    question: '연금 이전을 하면 기존에 받았던 세액공제 혜택이 모두 사라진다.',
+    answer: false,
+    explanation: '연금 이전은 해지가 아니므로 세액공제 혜택이 유지되며, 해지 위약금(기타소득세 16.5%)도 면제됩니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 25,
+    question: '기존 연금저축보험의 수익률이 불만족스러울 때 가장 좋은 방법은?',
+    options: ['해지 후 재가입', '연금 이전 제도로 증권사로 이전', '추가 보험료 납입', '그냥 유지'],
+    answerIndex: 1,
+    explanation: '연금 이전 제도를 활용하면 해지 위약금 없이 수익률이 더 좋은 상품으로 갈아탈 수 있습니다.',
+  },
+
+  // Card 26 - 금 투자
+  {
+    type: 'ox',
+    cardId: 26,
+    question: '금은 경제가 호황일 때 가치가 가장 많이 오른다.',
+    answer: false,
+    explanation: '금은 경제 위기나 인플레이션 시 안전자산 선호로 가치가 상승하는 대표적인 실물 자산입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 26,
+    question: '포트폴리오에 금을 포함하는 가장 큰 이유는?',
+    options: ['높은 이자 수익', '주식 폭락 시 방어 역할', '세금 면제 혜택', '유동성이 가장 높아서'],
+    answerIndex: 1,
+    explanation: '금은 주식 시장이 폭락할 때 가치가 오르는 경향이 있어 포트폴리오의 방어 자산으로 활용됩니다.',
+  },
+
+  // Card 27 - 리츠
+  {
+    type: 'ox',
+    cardId: 27,
+    question: '리츠(REITs)에 투자하려면 수십억 원의 부동산을 직접 매입해야 한다.',
+    answer: false,
+    explanation: '리츠는 소액으로 대형 빌딩에 간접 투자할 수 있으며, 주식처럼 사고팔기 편합니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 27,
+    question: '리츠(REITs)의 주요 수익 원천은?',
+    options: ['주가 상승차익만', '부동산 임대료를 배당으로 분배', '국가 보조금', '환전 차익'],
+    answerIndex: 1,
+    explanation: '리츠는 부동산에서 나오는 임대료 수익을 투자자에게 배당으로 분배하는 구조입니다.',
+  },
+
+  // Card 28 - 어카운트인포
+  {
+    type: 'ox',
+    cardId: 28,
+    question: '어카운트인포에서는 은행 계좌만 조회할 수 있고 보험이나 증권은 확인할 수 없다.',
+    answer: false,
+    explanation: '어카운트인포는 은행, 증권사, 보험사 등 모든 금융권의 계좌를 한눈에 확인할 수 있는 서비스입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 28,
+    question: '다음 중 어카운트인포의 주요 기능이 아닌 것은?',
+    options: ['모든 금융 계좌 조회', '휴면 계좌 잔액 이체', '카드 포인트 현금화', '주식 자동 매매'],
+    answerIndex: 3,
+    explanation: '어카운트인포는 계좌 조회, 휴면 계좌 관리, 카드 포인트 현금화 기능을 제공하지만 주식 매매 기능은 없습니다.',
+  },
+
+  // Card 29 - 예금자 보호 제도
+  {
+    type: 'ox',
+    cardId: 29,
+    question: '예금자 보호 제도는 주식이나 펀드 같은 투자 상품도 보호 대상이다.',
+    answer: false,
+    explanation: '예금자 보호 제도는 예금, 적금 등이 대상이며 주식, 펀드 같은 투자 상품은 보호 대상이 아닙니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 29,
+    question: '예금자 보호 제도의 보호 한도는 1인당 금융기관별 최대 얼마인가?',
+    options: ['1,000만 원', '3,000만 원', '5,000만 원', '1억 원'],
+    answerIndex: 2,
+    explanation: '예금보험공사는 금융기관별 1인당 원금과 이자를 합쳐 최대 5,000만 원까지 보호합니다.',
+  },
+
+  // Card 30 - 금융소득종합과세
+  {
+    type: 'ox',
+    cardId: 30,
+    question: '금융소득종합과세는 이자·배당 소득이 연간 1,000만 원을 초과할 때 적용된다.',
+    answer: false,
+    explanation: '금융소득종합과세는 이자·배당 소득이 연간 2,000만 원을 초과할 때 적용됩니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 30,
+    question: '금융소득종합과세를 피하기 위해 활용할 수 있는 절세 계좌는?',
+    options: ['일반 예금', 'ISA 및 연금 계좌', '마이너스 통장', '외화 예금'],
+    answerIndex: 1,
+    explanation: 'ISA나 연금 계좌를 활용하면 금융소득이 종합과세 대상에서 제외되는 혜택을 누릴 수 있습니다.',
+  },
+
+  // ── Part 4: 보험 기초 및 연말정산 시리즈 ──
+
+  // Card 31 - 실손의료보험
+  {
+    type: 'ox',
+    cardId: 31,
+    question: '실손의료보험(실비)은 실제 병원에서 지출한 치료비 전액을 돌려준다.',
+    answer: false,
+    explanation: '실손보험은 치료비의 70~80% 정도를 돌려받으며, 자기부담금이 있습니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 31,
+    question: '보험을 딱 하나만 가입해야 한다면 전문가들이 가장 추천하는 것은?',
+    options: ['종신보험', '실손의료보험', '저축보험', '여행자 보험'],
+    answerIndex: 1,
+    explanation: '실손의료보험은 가벼운 질병부터 큰 수술까지 폭넓게 보장되어 가성비가 가장 좋은 필수 보험입니다.',
+  },
+
+  // Card 32 - 소득공제 vs 세액공제
+  {
+    type: 'ox',
+    cardId: 32,
+    question: '소득공제와 세액공제는 같은 방식으로 세금을 줄여준다.',
+    answer: false,
+    explanation: '소득공제는 과세 대상 소득을 줄여주고, 세액공제는 결정된 세금에서 직접 차감하는 서로 다른 방식입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 32,
+    question: '다음 중 세액공제에 해당하는 항목은?',
+    options: ['신용카드 사용액', '연금저축·IRP 납입', '주택청약 납입', '대중교통 이용'],
+    answerIndex: 1,
+    explanation: '연금저축, IRP 납입은 세액공제 항목으로, 내야 할 세금에서 직접 빼줍니다.',
+  },
+
+  // Card 33 - 신용카드 25% 룰
+  {
+    type: 'ox',
+    cardId: 33,
+    question: '신용카드로 사용한 금액은 처음부터 전부 소득공제 대상이다.',
+    answer: false,
+    explanation: '총 급여의 25%를 초과한 금액부터 소득공제가 시작되며, 그 이하는 혜택이 없습니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 33,
+    question: '연봉 4,000만 원인 직장인이 카드 소득공제를 받으려면 최소 얼마 이상 사용해야 하나?',
+    options: ['500만 원', '750만 원', '1,000만 원', '2,000만 원'],
+    answerIndex: 2,
+    explanation: '총 급여의 25%인 1,000만 원을 초과하여 사용해야 초과분부터 소득공제가 시작됩니다.',
+  },
+
+  // Card 34 - 현금영수증
+  {
+    type: 'ox',
+    cardId: 34,
+    question: '현금영수증의 소득공제율은 신용카드보다 낮다.',
+    answer: false,
+    explanation: '현금영수증의 소득공제율은 30%로, 신용카드(15%)의 두 배입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 34,
+    question: '현금영수증의 소득공제율은?',
+    options: ['10%', '15%', '30%', '50%'],
+    answerIndex: 2,
+    explanation: '현금영수증의 소득공제율은 30%로, 체크카드와 같은 수준이며 신용카드(15%)의 두 배입니다.',
+  },
+
+  // Card 35 - 해외주식 양도소득세
+  {
+    type: 'ox',
+    cardId: 35,
+    question: '해외 주식으로 연간 100만 원 수익을 올리면 양도소득세를 내야 한다.',
+    answer: false,
+    explanation: '해외 주식 양도소득은 연간 250만 원까지 기본공제가 적용되어 세금이 없습니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 35,
+    question: '해외주식 양도소득세의 세율은?',
+    options: ['10%', '15.4%', '22%', '33%'],
+    answerIndex: 2,
+    explanation: '해외주식 양도소득세는 기본공제 250만 원 초과분에 대해 22%(지방소득세 포함)가 부과됩니다.',
+  },
+
+  // Card 36 - 환전 스프레드
+  {
+    type: 'ox',
+    cardId: 36,
+    question: '환전 우대 90%는 환전 비용의 90%를 줄여준다는 뜻이다.',
+    answer: true,
+    explanation: '환전 우대 90%는 매수/매도 환율의 스프레드(차이)를 90% 할인해준다는 의미입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 36,
+    question: '해외 투자 시 환전 비용을 줄이는 가장 좋은 방법은?',
+    options: ['공항에서 환전', '환전 우대율이 높은 증권사 이용', '현금으로 환전', '여행사를 통해 환전'],
+    answerIndex: 1,
+    explanation: '증권사 앱에서 환전 우대 90~95%를 적용받으면 환전 비용을 대폭 절감할 수 있습니다.',
+  },
+
+  // Card 37 - 배당소득세
+  {
+    type: 'ox',
+    cardId: 37,
+    question: '국내 주식 배당금은 세금 없이 전액 입금된다.',
+    answer: false,
+    explanation: '국내 배당금에는 15.4%의 배당소득세가 원천징수되어 차감 후 입금됩니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 37,
+    question: '국내 배당소득세 및 이자소득세의 원천징수 세율은?',
+    options: ['10%', '15.4%', '22%', '33%'],
+    answerIndex: 1,
+    explanation: '국내 배당·이자 소득에는 15.4%(소득세 14% + 지방소득세 1.4%)가 자동 원천징수됩니다.',
+  },
+
+  // Card 38 - 반도체 ETF
+  {
+    type: 'ox',
+    cardId: 38,
+    question: '반도체 ETF는 삼성전자 한 종목에만 투자하는 상품이다.',
+    answer: false,
+    explanation: '반도체 ETF는 삼성전자뿐 아니라 SK하이닉스, TSMC, 엔비디아 등 여러 반도체 기업에 분산 투자합니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 38,
+    question: '반도체 섹터 ETF에 투자하는 가장 큰 장점은?',
+    options: ['원금 보장', '개별 종목 위험을 분산하면서 핵심 산업에 투자', '세금 면제', '무위험 수익'],
+    answerIndex: 1,
+    explanation: '섹터 ETF는 특정 산업 내 여러 기업에 분산 투자하므로 개별 종목 리스크를 줄일 수 있습니다.',
+  },
+
+  // Card 39 - 레버리지 / 인버스
+  {
+    type: 'ox',
+    cardId: 39,
+    question: '레버리지 ETF는 횡보장에서도 가치가 보존된다.',
+    answer: false,
+    explanation: '레버리지 ETF는 횡보장에서도 변동성 전이(Volatility Decay) 현상으로 가치가 점점 깎입니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 39,
+    question: '레버리지 ETF 2배 상품의 특징으로 맞는 것은?',
+    options: ['항상 2배 수익 보장', '지수 상승 시 2배 수익, 하락 시 2배 손실', '원금이 보장된다', '장기 투자에 최적화'],
+    answerIndex: 1,
+    explanation: '레버리지 2배 ETF는 기초 지수가 오르면 2배 수익이지만, 떨어지면 2배 손실을 봅니다.',
+  },
+
+  // Card 40 - 마이너스 통장
+  {
+    type: 'ox',
+    cardId: 40,
+    question: '마이너스 통장은 일반 대출보다 금리가 보통 낮다.',
+    answer: false,
+    explanation: '마이너스 통장은 편의성이 높지만, 일반 대출보다 금리가 높은 경우가 많습니다.',
+  },
+  {
+    type: 'multiple',
+    cardId: 40,
+    question: '마이너스 통장의 가장 큰 위험은?',
+    options: ['해외 송금 불가', '내 돈처럼 착각해 소비 습관이 망가짐', '이자가 없다', '해지가 어렵다'],
+    answerIndex: 1,
+    explanation: '한 번 쓰기 시작하면 대출금을 내 돈인 줄 착각하고 소비 습관이 망가지기 쉬운 것이 가장 큰 위험입니다.',
+  },
 ];
 
 /** 카드 20장에서 무작위로 3문항을 뽑되, OX와 객관식을 섞는다 */
 export function pickRandomQuestions(count: number = 3): Question[] {
   // 카드 ID를 셔플해서 count개 선택
-  const cardIds = Array.from({ length: 20 }, (_, i) => i + 1);
+  const cardIds = Array.from({ length: 40 }, (_, i) => i + 1);
   for (let i = cardIds.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [cardIds[i], cardIds[j]] = [cardIds[j], cardIds[i]];

@@ -445,6 +445,410 @@ const terms: Term[] = [
     difficulty: 'advanced',
     topic: 'investment',
   },
+
+  // ── Part 3: 상품지식 및 ETF 실전 ──
+
+  // Card 21 - S&P 500
+  {
+    id: 41,
+    cardId: 21,
+    term: 'S&P 500',
+    definition: '미국 주식시장에 상장된 시가총액 상위 500개 우량 기업으로 구성된 지수로, 미국 경제 전체를 대표합니다.',
+    example: '애플, 마이크로소프트, 아마존 등 초일류 기업이 모두 포함',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 42,
+    cardId: 21,
+    term: '인덱스 펀드',
+    definition: '특정 지수(S&P 500 등)를 그대로 따라가도록 설계된 펀드로, 낮은 비용으로 시장 전체에 투자할 수 있습니다.',
+    example: '워런 버핏이 추천한 S&P 500 인덱스 펀드에 매월 적립식 투자',
+    difficulty: 'beginner',
+    topic: 'investment',
+  },
+
+  // Card 22 - 나스닥 100
+  {
+    id: 43,
+    cardId: 22,
+    term: '나스닥 100',
+    definition: '미국 나스닥 시장에 상장된 기업 중 금융주를 제외한 상위 100개 기업으로 구성된 기술주 중심 지수입니다.',
+    example: '반도체, AI, 플랫폼 등 혁신 기술 기업들이 대거 포진',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 44,
+    cardId: 22,
+    term: '변동성',
+    definition: '자산 가격이 얼마나 크게 오르내리는지를 나타내는 지표로, 변동성이 높을수록 위험과 수익 가능성이 모두 큽니다.',
+    example: '나스닥 100은 S&P 500보다 변동성이 크지만 장기 성장성도 높음',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+
+  // Card 23 - 운용보수
+  {
+    id: 45,
+    cardId: 23,
+    term: '운용보수',
+    definition: '투자한 돈에서 자산운용사가 관리 비용으로 매일 조금씩 떼어가는 수수료입니다.',
+    example: '운용보수 0.1%인 ETF와 0.5%인 ETF는 20년 후 수천만 원 차이',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 46,
+    cardId: 23,
+    term: '총보수비율 (TER)',
+    definition: 'Total Expense Ratio의 약자로, 운용보수 외 판매보수, 수탁보수 등을 모두 합산한 실제 투자 비용입니다.',
+    example: 'ETF 비교 시 운용보수만 보지 말고 TER(총보수비율)을 반드시 확인',
+    difficulty: 'advanced',
+    topic: 'investment',
+  },
+
+  // Card 24 - 적립식 투자
+  {
+    id: 47,
+    cardId: 24,
+    term: '적립식 투자 (DCA)',
+    definition: '주가와 상관없이 매달 정해진 날짜에 정해진 금액만큼 꾸준히 사는 투자 방식입니다.',
+    example: '월급날 자동으로 S&P 500 ETF를 30만원씩 매수 설정',
+    difficulty: 'beginner',
+    topic: 'investment',
+  },
+  {
+    id: 48,
+    cardId: 24,
+    term: '코스트 에버리징',
+    definition: '적립식 투자로 비쌀 때 적게, 쌀 때 많이 사게 되어 평균 매수 단가가 낮아지는 효과입니다.',
+    example: '1만원일 때 3주, 5천원일 때 6주를 사면 평균 단가는 약 6,667원',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+
+  // Card 25 - 연금 이전 제도
+  {
+    id: 49,
+    cardId: 25,
+    term: '연금 이전',
+    definition: '기존 연금 계좌를 해지하지 않고 다른 금융기관이나 상품으로 옮기는 제도로, 세제 혜택이 유지됩니다.',
+    example: '은행 연금저축보험 → 증권사 연금저축펀드로 이전하여 ETF 투자',
+    difficulty: 'intermediate',
+    topic: 'retirement',
+  },
+  {
+    id: 50,
+    cardId: 25,
+    term: '기타소득세',
+    definition: '연금 계좌를 중도 해지할 경우 그동안의 세제 혜택에 대해 부과되는 16.5%의 세금입니다.',
+    example: '연금저축 해지 시 세액공제 받았던 금액에 16.5% 기타소득세 부과',
+    difficulty: 'advanced',
+    topic: 'tax',
+  },
+
+  // Card 26 - 금 투자
+  {
+    id: 51,
+    cardId: 26,
+    term: '금 ETF',
+    definition: '금 현물 가격을 추종하는 ETF로, 골드바를 직접 사지 않고도 주식처럼 금에 투자할 수 있습니다.',
+    example: 'KRX 금시장이나 금 ETF를 통해 1g 단위로 금 매매 가능',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 52,
+    cardId: 26,
+    term: '안전 자산',
+    definition: '경제 위기나 시장 불안 시에도 가치가 유지되거나 오히려 상승하는 자산으로, 금과 달러가 대표적입니다.',
+    example: '포트폴리오에 금을 5~10% 섞어두면 주식 폭락 시 방어 가능',
+    difficulty: 'beginner',
+    topic: 'investment',
+  },
+
+  // Card 27 - 리츠
+  {
+    id: 53,
+    cardId: 27,
+    term: '리츠 (REITs)',
+    definition: '다수의 투자자에게 돈을 모아 부동산에 투자하고, 임대료 수익을 배당으로 나눠주는 부동산 간접 투자 상품입니다.',
+    example: '소액으로 대형 빌딩, 쇼핑몰, 데이터 센터의 주인이 될 수 있음',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 54,
+    cardId: 27,
+    term: '배당 수익률',
+    definition: '투자 금액 대비 받는 배당금의 비율로, 리츠는 보통 예금보다 높은 배당 수익률을 제공합니다.',
+    example: '리츠 배당 수익률 5%이면 1,000만 원 투자 시 연 50만 원 배당',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+
+  // Card 28 - 어카운트인포
+  {
+    id: 55,
+    cardId: 28,
+    term: '어카운트인포',
+    definition: '내가 가입한 모든 은행, 증권사, 보험 계좌를 한눈에 확인할 수 있는 계좌정보통합관리서비스입니다.',
+    example: '앱에서 휴면 계좌 잔액 확인 후 주거래 계좌로 이체',
+    difficulty: 'beginner',
+    topic: 'savings',
+  },
+  {
+    id: 56,
+    cardId: 28,
+    term: '휴면 계좌',
+    definition: '장기간 거래가 없어 잠들어 있는 계좌로, 소액이라도 찾으면 쌈짓돈이 됩니다.',
+    example: '어카운트인포로 잊고 있던 옛날 계좌의 잔액 5만 원 발견',
+    difficulty: 'beginner',
+    topic: 'savings',
+  },
+
+  // Card 29 - 예금자 보호 제도
+  {
+    id: 57,
+    cardId: 29,
+    term: '예금보험공사',
+    definition: '금융회사가 파산했을 때 예금자의 돈을 대신 돌려주는 정부 기관으로, 최대 5,000만 원까지 보호합니다.',
+    example: '은행, 저축은행, 보험사 등이 예금보험공사의 보호 대상',
+    difficulty: 'intermediate',
+    topic: 'savings',
+  },
+  {
+    id: 58,
+    cardId: 29,
+    term: '예금자 보호 한도',
+    definition: '금융기관별 1인당 원금과 이자를 합쳐 최대 5,000만 원까지 보장되는 한도입니다.',
+    example: '고금리 저축은행은 5,000만 원씩 쪼개서 예치하는 것이 안전',
+    difficulty: 'beginner',
+    topic: 'savings',
+  },
+
+  // Card 30 - 금융소득종합과세
+  {
+    id: 59,
+    cardId: 30,
+    term: '금융소득종합과세',
+    definition: '이자·배당 소득이 연간 2,000만 원을 초과하면 다른 소득과 합쳐서 더 높은 세율로 과세하는 제도입니다.',
+    example: '이자+배당 합계 3,000만 원이면 초과분 1,000만 원을 급여와 합산 과세',
+    difficulty: 'advanced',
+    topic: 'tax',
+  },
+  {
+    id: 60,
+    cardId: 30,
+    term: '분리과세',
+    definition: '다른 소득과 합치지 않고 해당 소득에 대해서만 별도 세율로 과세하는 방식으로, ISA 계좌 등에서 활용됩니다.',
+    example: 'ISA 계좌 초과 수익은 9.9% 분리과세로 종합과세 회피 가능',
+    difficulty: 'advanced',
+    topic: 'tax',
+  },
+
+  // ── Part 4: 보험 기초 및 연말정산 시리즈 ──
+
+  // Card 31 - 실손의료보험
+  {
+    id: 61,
+    cardId: 31,
+    term: '실손의료보험',
+    definition: '실제로 병원에 낸 치료비의 상당 부분(70~80%)을 돌려받는 보험으로, 보험 중 가장 기본적인 필수 보험입니다.',
+    example: '감기부터 큰 수술까지 폭넓게 보장, 가성비 최고의 보험',
+    difficulty: 'beginner',
+    topic: 'insurance',
+  },
+  {
+    id: 62,
+    cardId: 31,
+    term: '4세대 실손',
+    definition: '2021년 7월 이후 출시된 실손보험으로, 비급여 보장이 특약으로 분리되어 보험료가 더 저렴해졌습니다.',
+    example: '비급여 항목 이용이 적으면 보험료 할인 혜택을 받을 수 있음',
+    difficulty: 'intermediate',
+    topic: 'insurance',
+  },
+
+  // Card 32 - 소득공제 vs 세액공제
+  {
+    id: 63,
+    cardId: 32,
+    term: '소득공제',
+    definition: '세금을 매기는 기준인 과세 대상 소득 자체를 줄여주는 방식으로, 신용카드·주택청약 등이 해당됩니다.',
+    example: '연봉 5,000만 원에서 소득공제 500만 원 → 4,500만 원에 세금 부과',
+    difficulty: 'beginner',
+    topic: 'tax',
+  },
+  {
+    id: 64,
+    cardId: 32,
+    term: '과세표준',
+    definition: '각종 소득공제를 적용한 후 실제로 세금이 부과되는 기준 금액입니다.',
+    example: '총소득 5,000만 원 - 소득공제 1,500만 원 = 과세표준 3,500만 원',
+    difficulty: 'intermediate',
+    topic: 'tax',
+  },
+
+  // Card 33 - 신용카드 25% 룰
+  {
+    id: 65,
+    cardId: 33,
+    term: '소득공제 문턱',
+    definition: '총 급여의 25%를 넘게 카드를 사용해야 초과분부터 소득공제가 시작되는 최소 기준입니다.',
+    example: '연봉 4,000만 원이면 1,000만 원까지는 공제 혜택 0원',
+    difficulty: 'beginner',
+    topic: 'tax',
+  },
+  {
+    id: 66,
+    cardId: 33,
+    term: '체크카드 공제율',
+    definition: '체크카드의 소득공제율은 30%로 신용카드(15%)의 두 배이므로, 문턱 초과 후에는 체크카드가 유리합니다.',
+    example: '25%까지 혜택 좋은 신용카드 → 이후 공제율 높은 체크카드 사용',
+    difficulty: 'beginner',
+    topic: 'tax',
+  },
+
+  // Card 34 - 현금영수증
+  {
+    id: 67,
+    cardId: 34,
+    term: '현금영수증',
+    definition: '현금으로 결제할 때 휴대폰 번호를 입력하여 발급받는 영수증으로, 소득공제율 30%가 적용됩니다.',
+    example: '카페에서 현금 결제 시 번호 입력 → 30% 소득공제 자동 적립',
+    difficulty: 'beginner',
+    topic: 'tax',
+  },
+  {
+    id: 68,
+    cardId: 34,
+    term: '홈택스',
+    definition: '국세청의 온라인 세금 신고·조회 서비스로, 현금영수증 자동 발급 번호 등록도 가능합니다.',
+    example: '홈택스에 휴대폰 번호 등록 → 현금 결제 시 번호만 불러도 자동 적립',
+    difficulty: 'beginner',
+    topic: 'tax',
+  },
+
+  // Card 35 - 해외주식 양도소득세
+  {
+    id: 69,
+    cardId: 35,
+    term: '해외주식 양도소득세',
+    definition: '해외 주식 매매로 1년간 번 돈에서 잃은 돈을 뺀 순수익이 250만 원을 넘으면 22% 세율로 과세됩니다.',
+    example: '미국 주식 수익 500만 원 - 기본공제 250만 원 = 250만 원 × 22% = 55만 원',
+    difficulty: 'intermediate',
+    topic: 'tax',
+  },
+  {
+    id: 70,
+    cardId: 35,
+    term: '기본공제 250만 원',
+    definition: '해외 주식 양도소득에 적용되는 연간 비과세 한도로, 250만 원까지는 세금이 없습니다.',
+    example: '연말에 손실 난 주식을 팔아 순수익을 250만 원 이하로 조절하는 절세 전략',
+    difficulty: 'intermediate',
+    topic: 'tax',
+  },
+
+  // Card 36 - 환전 스프레드
+  {
+    id: 71,
+    cardId: 36,
+    term: '환전 스프레드',
+    definition: '외화를 살 때와 팔 때의 가격 차이로, 이 차이가 사실상 은행이나 증권사의 환전 수수료입니다.',
+    example: '기준 환율 1,300원인데 살 때 1,313원, 팔 때 1,287원이면 스프레드 26원',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 72,
+    cardId: 36,
+    term: '환전 우대율',
+    definition: '환전 스프레드를 할인해주는 비율로, 90% 우대면 스프레드의 90%를 줄여준다는 뜻입니다.',
+    example: '증권사 앱에서 환전 우대 95% 적용 → 환전 비용 대폭 절감',
+    difficulty: 'beginner',
+    topic: 'investment',
+  },
+
+  // Card 37 - 배당소득세
+  {
+    id: 73,
+    cardId: 37,
+    term: '원천징수',
+    definition: '소득이 발생하는 시점에 세금을 미리 떼고 지급하는 방식으로, 배당금과 이자에 15.4%가 자동 적용됩니다.',
+    example: '10만 원 배당 → 15.4% 원천징수 → 통장에 84,600원 입금',
+    difficulty: 'intermediate',
+    topic: 'tax',
+  },
+  {
+    id: 74,
+    cardId: 37,
+    term: '배당소득세',
+    definition: '주식 배당금이나 은행 이자에 부과되는 15.4%의 세금(소득세 14% + 지방소득세 1.4%)입니다.',
+    example: 'ISA 계좌를 활용하면 배당소득세 15.4%를 내지 않거나 미룰 수 있음',
+    difficulty: 'intermediate',
+    topic: 'tax',
+  },
+
+  // Card 38 - 반도체 ETF
+  {
+    id: 75,
+    cardId: 38,
+    term: '섹터 ETF',
+    definition: '특정 산업(반도체, 헬스케어 등)에 속한 기업들만 모아 투자하는 테마형 상장지수펀드입니다.',
+    example: '반도체 ETF로 삼성전자, SK하이닉스, TSMC 등에 한 번에 투자',
+    difficulty: 'intermediate',
+    topic: 'investment',
+  },
+  {
+    id: 76,
+    cardId: 38,
+    term: 'SOXX',
+    definition: '미국 필라델피아 반도체 지수를 추종하는 대표적인 반도체 섹터 ETF입니다.',
+    example: 'SOXX에 투자하면 엔비디아, AMD, 인텔 등 글로벌 반도체 대장주에 분산 투자',
+    difficulty: 'advanced',
+    topic: 'investment',
+  },
+
+  // Card 39 - 레버리지 / 인버스
+  {
+    id: 77,
+    cardId: 39,
+    term: '레버리지 ETF',
+    definition: '기초 지수 수익률의 2배(또는 3배)를 추구하는 ETF로, 상승 시 배수 수익이지만 하락 시 배수 손실입니다.',
+    example: '코스피가 1% 오르면 레버리지 2배 ETF는 2% 상승, 1% 떨어지면 2% 하락',
+    difficulty: 'advanced',
+    topic: 'investment',
+  },
+  {
+    id: 78,
+    cardId: 39,
+    term: '인버스 ETF',
+    definition: '기초 지수가 하락할 때 수익이 나는 역방향 ETF로, 하락장에 베팅하는 상품입니다.',
+    example: '코스피가 1% 하락하면 인버스 ETF는 1% 상승, 횡보장에서도 가치 하락 위험',
+    difficulty: 'advanced',
+    topic: 'investment',
+  },
+
+  // Card 40 - 마이너스 통장
+  {
+    id: 79,
+    cardId: 40,
+    term: '마이너스 통장',
+    definition: '미리 정해진 한도 내에서 빌려 쓰고, 사용 금액과 기간에 따라 이자를 내는 한도 대출 상품입니다.',
+    example: '한도 1,000만 원 중 300만 원 사용 → 300만 원에 대해서만 이자 부과',
+    difficulty: 'beginner',
+    topic: 'credit',
+  },
+  {
+    id: 80,
+    cardId: 40,
+    term: '한도 대출',
+    definition: '약정된 대출 한도 내에서 자유롭게 입출금이 가능한 대출 방식으로, 마이너스 통장이 대표적입니다.',
+    example: '일반 대출보다 금리가 높은 경우가 많아 장기 사용 시 이자 부담 증가',
+    difficulty: 'intermediate',
+    topic: 'credit',
+  },
 ];
 
 export default terms;
