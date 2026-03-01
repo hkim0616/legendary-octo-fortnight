@@ -16,3 +16,6 @@ npm-debug.log*
 # Misc
 .DS_Store
 *.pem
+
+# Runtime data (calendar storage)
+data/calendars.json

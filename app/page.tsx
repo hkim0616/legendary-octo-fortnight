@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import EventForm from './components/EventForm';
+import HomeClient from './components/HomeClient';
 
 export default function Page() {
   return (
@@ -10,7 +10,7 @@ export default function Page() {
         </div>
       }
     >
-      <EventForm />
+      <HomeClient />
     </Suspense>
   );
 }
