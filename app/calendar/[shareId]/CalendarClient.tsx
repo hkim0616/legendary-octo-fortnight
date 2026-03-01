@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import type { CalendarEvent, SharedCalendar } from '@/lib/types';
 
@@ -32,11 +32,14 @@ export default function CalendarClient({ initialCalendar, shareId }: Props) {
   const [copied, setCopied] = useState<string | null>(null);
   const [shareUrl, setShareUrl] = useState('');
   const [webcalUrl, setWebcalUrl] = useState('');
+  const [canNativeShare, setCanNativeShare] = useState(false);
+  const [showSharePanel, setShowSharePanel] = useState(false);
 
   // Compute URLs client-side (window is not available on server)
   useEffect(() => {
     setShareUrl(`${window.location.origin}/calendar/${shareId}`);
     setWebcalUrl(`webcal://${window.location.host}/api/ics/${shareId}`);
+    setCanNativeShare(typeof navigator !== 'undefined' && 'share' in navigator);
   }, [shareId]);
 
   // Poll for updates every 30 s so partner's additions appear automatically
@@ -126,6 +129,22 @@ export default function CalendarClient({ initialCalendar, shareId }: Props) {
     }
   }
 
+  // Web Share API — opens the native share sheet on iOS/Android.
+  // This lets the user pick KakaoTalk, iMessage, WhatsApp, etc. directly.
+  async function handleNativeShare() {
+    const shareData = {
+      title: `${calendar.name} | 커플 캘린더`,
+      text: `📅 ${calendar.name}\n일정을 함께 확인하고 Apple 캘린더에 추가해보세요!`,
+      url: shareUrl,
+    };
+    try {
+      await navigator.share(shareData);
+    } catch {
+      // User cancelled or API unavailable — fall back to copy
+      await copy(shareUrl, 'native');
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
@@ -163,43 +182,41 @@ export default function CalendarClient({ initialCalendar, shareId }: Props) {
 
         {/* Action bar */}
         <div className="grid grid-cols-3 gap-3 mb-6">
+          {/* Share — Web Share API on mobile, copy fallback on desktop */}
           <button
-            onClick={() => copy(shareUrl, 'share')}
+            onClick={canNativeShare ? handleNativeShare : () => copy(shareUrl, 'share')}
             className="flex flex-col items-center gap-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 text-slate-300 hover:text-white transition-all"
           >
-            <span className="text-xl">{copied === 'share' ? '✅' : '🔗'}</span>
-            <span className="text-xs leading-tight">{copied === 'share' ? '복사됨!' : '링크 복사'}</span>
+            <span className="text-xl">
+              {copied === 'share' || copied === 'native' ? '✅' : canNativeShare ? '📤' : '🔗'}
+            </span>
+            <span className="text-xs leading-tight text-center">
+              {copied === 'share' || copied === 'native'
+                ? '복사됨!'
+                : canNativeShare
+                ? '공유하기'
+                : '링크 복사'}
+            </span>
           </button>
 
-          {/* webcal:// opens Apple Calendar / Outlook for live subscription */}
+          {/* webcal:// — opens Apple Calendar / Outlook for live subscription */}
           <a
             href={webcalUrl || '#'}
             className="flex flex-col items-center gap-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 text-slate-300 hover:text-white transition-all"
           >
-            <span className="text-xl">📱</span>
-            <span className="text-xs leading-tight text-center">Apple 캘린더 구독</span>
+            <span className="text-xl">📅</span>
+            <span className="text-xs leading-tight text-center">캘린더 구독</span>
           </a>
 
+          {/* ?download forces Content-Disposition: attachment */}
           <a
-            href={`/api/ics/${shareId}`}
+            href={`/api/ics/${shareId}?download`}
             className="flex flex-col items-center gap-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 text-slate-300 hover:text-white transition-all"
           >
             <span className="text-xl">📥</span>
-            <span className="text-xs leading-tight">.ics 다운로드</span>
+            <span className="text-xs leading-tight">.ics 저장</span>
           </a>
         </div>
-
-        {/* webcal info */}
-        {webcalUrl && (
-          <div className="mb-6 bg-blue-500/10 border border-blue-500/30 rounded-xl px-4 py-3 flex items-start gap-3">
-            <span className="text-blue-400 text-lg shrink-0">ℹ️</span>
-            <div className="text-xs text-slate-400 leading-relaxed">
-              <span className="text-blue-300 font-medium">Apple 캘린더 구독</span>을 클릭하면
-              캘린더 앱에서 이 일정들이 자동으로 동기화됩니다.
-              파트너가 일정을 추가하면 자동으로 반영됩니다.
-            </div>
-          </div>
-        )}
 
         {/* Add event toggle */}
         {!showForm ? (
@@ -316,28 +333,95 @@ export default function CalendarClient({ initialCalendar, shareId }: Props) {
           </div>
         )}
 
-        {/* Share URL footer */}
-        <div className="mt-8 bg-white/5 border border-white/10 rounded-2xl p-4">
-          <p className="text-slate-400 text-xs mb-2 font-medium">파트너와 공유하기</p>
-          <div className="flex items-center gap-2">
-            <input
-              readOnly
-              value={shareUrl}
-              onClick={(e) => (e.target as HTMLInputElement).select()}
-              className="flex-1 min-w-0 bg-slate-700/60 border border-slate-600 rounded-lg px-3 py-2 text-slate-300 text-xs cursor-pointer focus:outline-none"
-            />
-            <button
-              onClick={() => copy(shareUrl, 'footer')}
-              className="shrink-0 bg-slate-600 hover:bg-slate-500 text-white text-xs px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
-            >
-              {copied === 'footer' ? '✅' : '복사'}
-            </button>
+        {/* Share & Subscribe panel */}
+        <div className="mt-8 space-y-3">
+
+          {/* ── Section: KakaoTalk / Messages / Web Share ── */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <p className="text-white text-sm font-semibold mb-3">💬 카카오톡 · 메시지로 보내기</p>
+
+            {/* Native share (iOS/Android) */}
+            {canNativeShare && (
+              <button
+                onClick={handleNativeShare}
+                className="w-full flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-semibold py-3 rounded-xl transition-colors text-sm mb-3"
+              >
+                <span>📤</span> 공유 앱 열기 (카카오톡 · 메시지 등)
+              </button>
+            )}
+
+            {/* Share URL — always visible */}
+            <p className="text-slate-400 text-xs mb-1.5">링크 직접 복사</p>
+            <div className="flex items-center gap-2">
+              <input
+                readOnly
+                value={shareUrl}
+                onClick={(e) => (e.target as HTMLInputElement).select()}
+                className="flex-1 min-w-0 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-slate-300 text-xs cursor-pointer focus:outline-none"
+              />
+              <button
+                onClick={() => copy(shareUrl, 'footer')}
+                className="shrink-0 bg-slate-600 hover:bg-slate-500 text-white text-xs px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
+              >
+                {copied === 'footer' ? '✅' : '복사'}
+              </button>
+            </div>
+            <p className="text-slate-600 text-xs mt-2">
+              공유 코드 <code className="font-mono text-slate-500">{shareId}</code>
+            </p>
           </div>
-          <p className="text-slate-600 text-xs mt-2">
-            공유 코드{' '}
-            <code className="font-mono text-slate-500">{shareId}</code>
-            로 파트너가 이 캘린더를 열 수 있습니다.
-          </p>
+
+          {/* ── Section: Apple Calendar subscription ── */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+            <p className="text-white text-sm font-semibold mb-1">📅 Apple 캘린더 구독</p>
+            <p className="text-slate-500 text-xs mb-3 leading-relaxed">
+              구독하면 새 일정이 추가될 때마다 자동으로 동기화됩니다 (1시간 간격).
+            </p>
+
+            {/* Primary webcal:// CTA */}
+            <a
+              href={webcalUrl || '#'}
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition-colors text-sm mb-3"
+            >
+              <span>📅</span> Apple 캘린더에 구독 추가
+            </a>
+
+            {/* Manual webcal URL — for copying into calendar apps */}
+            <p className="text-slate-400 text-xs mb-1.5">구독 URL 직접 복사</p>
+            <div className="flex items-center gap-2">
+              <input
+                readOnly
+                value={webcalUrl}
+                onClick={(e) => (e.target as HTMLInputElement).select()}
+                className="flex-1 min-w-0 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-slate-400 text-xs font-mono cursor-pointer focus:outline-none"
+              />
+              <button
+                onClick={() => copy(webcalUrl, 'webcal')}
+                className="shrink-0 bg-slate-600 hover:bg-slate-500 text-white text-xs px-3 py-2 rounded-lg transition-colors whitespace-nowrap"
+              >
+                {copied === 'webcal' ? '✅' : '복사'}
+              </button>
+            </div>
+
+            {/* Step-by-step guide */}
+            <div className="mt-4 bg-slate-800/60 rounded-xl p-3 space-y-1.5">
+              <p className="text-slate-300 text-xs font-medium mb-2">수동으로 추가하는 방법</p>
+              {[
+                '위 구독 URL을 복사합니다.',
+                'iPhone/Mac에서 캘린더 앱을 엽니다.',
+                'iPhone: 하단 캘린더 → 캘린더 추가 → 구독 캘린더 추가',
+                'Mac: 파일 → 새 캘린더 구독 → URL 붙여넣기',
+                '\'구독\'을 탭하면 완료!',
+              ].map((step, i) => (
+                <div key={i} className="flex items-start gap-2">
+                  <span className="shrink-0 w-4 h-4 rounded-full bg-blue-600/40 text-blue-300 text-[10px] flex items-center justify-center font-bold mt-0.5">
+                    {i + 1}
+                  </span>
+                  <p className="text-slate-400 text-xs leading-relaxed">{step}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
     </div>
