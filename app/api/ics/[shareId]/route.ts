@@ -24,8 +24,7 @@ export async function GET(
       { key: 'X-WR-CALNAME', value: calendar.name },
       { key: 'X-WR-CALDESC', value: `${calendar.name} — 커플 공유 캘린더` },
       { key: 'X-WR-TIMEZONE', value: 'Asia/Seoul' },
-      { key: 'X-PUBLISHED-TTL', value: 'PT1H' },       // Apple Calendar: refresh every hour
-      { key: 'REFRESH-INTERVAL;VALUE=DURATION', value: 'PT1H' }, // RFC 7986 standard
+      { key: 'X-PUBLISHED-TTL', value: 'PT1H' }, // Apple Calendar: refresh every hour
     ],
   });
 
@@ -37,7 +36,9 @@ export async function GET(
       summary: event.title,
       location: event.location || undefined,
       created: new Date(event.createdAt),
-      timezone: 'Asia/Seoul',
+      // No timezone: dates are output as UTC (Z suffix), which all calendar
+      // apps handle correctly. Passing timezone here caused ical-generator to
+      // stamp UTC component values with the TZID without converting them.
     });
   }
 
