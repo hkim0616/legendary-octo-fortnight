@@ -1,6 +1,16 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+
+interface EventData {
+  id: string;
+  title: string;
+  location: string;
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+}
 
 function toICSDateString(date: string, time: string): string {
   const d = new Date(`${date}T${time}`);
@@ -16,47 +26,6 @@ function toICSDateString(date: string, time: string): string {
   );
 }
 
-function generateICS({
-  title,
-  location,
-  startDate,
-  startTime,
-  endDate,
-  endTime,
-}: {
-  title: string;
-  location: string;
-  startDate: string;
-  startTime: string;
-  endDate: string;
-  endTime: string;
-}): string {
-  const now = toICSDateString(
-    new Date().toISOString().slice(0, 10),
-    new Date().toISOString().slice(11, 16)
-  );
-  const uid = `${Date.now()}@calendar-share`;
-
-  return [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Calendar Share//KO",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "BEGIN:VEVENT",
-    `DTSTART:${toICSDateString(startDate, startTime)}`,
-    `DTEND:${toICSDateString(endDate, endTime)}`,
-    `DTSTAMP:${now}`,
-    `UID:${uid}`,
-    `SUMMARY:${title}`,
-    location ? `LOCATION:${location}` : "",
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ]
-    .filter(Boolean)
-    .join("\r\n");
-}
-
 function addOneHour(date: string, time: string): { date: string; time: string } {
   const d = new Date(`${date}T${time}`);
   d.setHours(d.getHours() + 1);
@@ -67,150 +36,466 @@ function addOneHour(date: string, time: string): { date: string; time: string } 
   };
 }
 
-export default function Home() {
+function generateICSMultiple(events: EventData[]): string {
+  const now = toICSDateString(
+    new Date().toISOString().slice(0, 10),
+    new Date().toISOString().slice(11, 16)
+  );
+
+  const vevents = events.map((ev, i) => {
+    const uid = `${Date.now()}-${i}@calendar-share`;
+    return [
+      "BEGIN:VEVENT",
+      `DTSTART:${toICSDateString(ev.startDate, ev.startTime)}`,
+      `DTEND:${toICSDateString(ev.endDate, ev.endTime)}`,
+      `DTSTAMP:${now}`,
+      `UID:${uid}`,
+      `SUMMARY:${ev.title}`,
+      ev.location ? `LOCATION:${ev.location}` : "",
+      "END:VEVENT",
+    ]
+      .filter(Boolean)
+      .join("\r\n");
+  });
+
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Calendar Share//KO",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    ...vevents,
+    "END:VCALENDAR",
+  ].join("\r\n");
+}
+
+function encodeEventsToURL(events: EventData[]): string {
+  const minimal = events.map((ev) => ({
+    t: ev.title,
+    l: ev.location,
+    sd: ev.startDate,
+    st: ev.startTime,
+    ed: ev.endDate,
+    et: ev.endTime,
+  }));
+  const json = JSON.stringify(minimal);
+  const encoded = btoa(unescape(encodeURIComponent(json)));
+  return encoded;
+}
+
+function decodeEventsFromURL(data: string): EventData[] | null {
+  try {
+    const json = decodeURIComponent(escape(atob(data)));
+    const parsed = JSON.parse(json);
+    return parsed.map(
+      (ev: { t: string; l: string; sd: string; st: string; ed: string; et: string }, i: number) => ({
+        id: `shared-${i}`,
+        title: ev.t,
+        location: ev.l,
+        startDate: ev.sd,
+        startTime: ev.st,
+        endDate: ev.ed,
+        endTime: ev.et,
+      })
+    );
+  } catch {
+    return null;
+  }
+}
+
+function createEmptyEvent(): EventData {
   const today = new Date().toISOString().slice(0, 10);
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [startDate, setStartDate] = useState(today);
-  const [startTime, setStartTime] = useState("09:00");
-  const [endDate, setEndDate] = useState(today);
-  const [endTime, setEndTime] = useState("10:00");
+  return {
+    id: crypto.randomUUID(),
+    title: "",
+    location: "",
+    startDate: today,
+    startTime: "09:00",
+    endDate: today,
+    endTime: "10:00",
+  };
+}
 
-  const handleStartDateChange = useCallback(
-    (newDate: string) => {
-      setStartDate(newDate);
-      const result = addOneHour(newDate, startTime);
-      setEndDate(result.date);
-      setEndTime(result.time);
+function downloadICS(events: EventData[]) {
+  const icsContent = generateICSMultiple(events);
+  const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download =
+    events.length === 1
+      ? `${events[0].title.trim().replace(/\s+/g, "_")}.ics`
+      : "calendar-events.ics";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function formatDateTime(date: string, time: string): string {
+  const d = new Date(`${date}T${time}`);
+  return d.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+/* ─── Event Form Card ─── */
+function EventCard({
+  event,
+  index,
+  total,
+  onChange,
+  onRemove,
+}: {
+  event: EventData;
+  index: number;
+  total: number;
+  onChange: (id: string, field: keyof EventData, value: string) => void;
+  onRemove: (id: string) => void;
+}) {
+  const handleStartDateChange = (val: string) => {
+    onChange(event.id, "startDate", val);
+    const result = addOneHour(val, event.startTime);
+    onChange(event.id, "endDate", result.date);
+    onChange(event.id, "endTime", result.time);
+  };
+
+  const handleStartTimeChange = (val: string) => {
+    onChange(event.id, "startTime", val);
+    const result = addOneHour(event.startDate, val);
+    onChange(event.id, "endDate", result.date);
+    onChange(event.id, "endTime", result.time);
+  };
+
+  const inputCls =
+    "w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent";
+
+  return (
+    <div className="bg-white rounded-2xl shadow-lg p-5 sm:p-6 relative">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-sm font-semibold text-gray-700">
+          일정 {total > 1 ? index + 1 : ""}
+        </h2>
+        {total > 1 && (
+          <button
+            onClick={() => onRemove(event.id)}
+            className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors cursor-pointer"
+            aria-label="일정 삭제"
+          >
+            ×
+          </button>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        {/* 제목 */}
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            일정 제목 <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            placeholder="예: 팀 회의"
+            value={event.title}
+            onChange={(e) => onChange(event.id, "title", e.target.value)}
+            className={inputCls}
+          />
+        </div>
+
+        {/* 장소 */}
+        <div>
+          <label className="block text-sm font-medium mb-1">장소</label>
+          <input
+            type="text"
+            placeholder="예: 회의실 A"
+            value={event.location}
+            onChange={(e) => onChange(event.id, "location", e.target.value)}
+            className={inputCls}
+          />
+        </div>
+
+        {/* 시작 */}
+        <div>
+          <label className="block text-sm font-medium mb-1">시작</label>
+          <div className="flex gap-2">
+            <input
+              type="date"
+              value={event.startDate}
+              onChange={(e) => handleStartDateChange(e.target.value)}
+              className={`flex-1 ${inputCls}`}
+            />
+            <input
+              type="time"
+              value={event.startTime}
+              onChange={(e) => handleStartTimeChange(e.target.value)}
+              className={`w-28 ${inputCls}`}
+            />
+          </div>
+        </div>
+
+        {/* 종료 */}
+        <div>
+          <label className="block text-sm font-medium mb-1">종료</label>
+          <div className="flex gap-2">
+            <input
+              type="date"
+              value={event.endDate}
+              onChange={(e) => onChange(event.id, "endDate", e.target.value)}
+              className={`flex-1 ${inputCls}`}
+            />
+            <input
+              type="time"
+              value={event.endTime}
+              onChange={(e) => onChange(event.id, "endTime", e.target.value)}
+              className={`w-28 ${inputCls}`}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Shared View (read-only) ─── */
+function SharedView({ events }: { events: EventData[] }) {
+  return (
+    <main className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 mb-4">
+          <h1 className="text-2xl font-bold text-center mb-1">공유된 일정</h1>
+          <p className="text-sm text-gray-500 text-center mb-6">
+            {events.length}개의 일정이 공유되었습니다
+          </p>
+
+          <div className="space-y-4">
+            {events.map((ev, i) => (
+              <div
+                key={ev.id}
+                className="border border-gray-200 rounded-xl p-4 space-y-1"
+              >
+                <h3 className="font-semibold text-gray-900">
+                  {events.length > 1 && (
+                    <span className="text-blue-600 mr-1">{i + 1}.</span>
+                  )}
+                  {ev.title}
+                </h3>
+                {ev.location && (
+                  <p className="text-sm text-gray-500">📍 {ev.location}</p>
+                )}
+                <p className="text-sm text-gray-500">
+                  🕐 {formatDateTime(ev.startDate, ev.startTime)}
+                </p>
+                <p className="text-sm text-gray-500">
+                  → {formatDateTime(ev.endDate, ev.endTime)}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => downloadICS(events)}
+            className="w-full mt-6 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors cursor-pointer"
+          >
+            내 캘린더에 추가 (.ics 다운로드)
+          </button>
+        </div>
+
+        <p className="text-xs text-gray-400 text-center mt-4">
+          다운로드한 .ics 파일을 Google Calendar, Apple Calendar 등에서 열 수 있습니다.
+        </p>
+      </div>
+    </main>
+  );
+}
+
+/* ─── Main Page ─── */
+export default function Home() {
+  const [events, setEvents] = useState<EventData[]>([createEmptyEvent()]);
+  const [sharedEvents, setSharedEvents] = useState<EventData[] | null>(null);
+  const [shareLink, setShareLink] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  // Check URL for shared data on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const data = params.get("d");
+    if (data) {
+      const decoded = decodeEventsFromURL(data);
+      if (decoded && decoded.length > 0) {
+        setSharedEvents(decoded);
+      }
+    }
+  }, []);
+
+  const handleEventChange = useCallback(
+    (id: string, field: keyof EventData, value: string) => {
+      setEvents((prev) =>
+        prev.map((ev) => (ev.id === id ? { ...ev, [field]: value } : ev))
+      );
     },
-    [startTime]
+    []
   );
 
-  const handleStartTimeChange = useCallback(
-    (newTime: string) => {
-      setStartTime(newTime);
-      const result = addOneHour(startDate, newTime);
-      setEndDate(result.date);
-      setEndTime(result.time);
-    },
-    [startDate]
-  );
+  const handleRemoveEvent = useCallback((id: string) => {
+    setEvents((prev) => prev.filter((ev) => ev.id !== id));
+  }, []);
 
-  const handleDownload = useCallback(() => {
-    if (!title.trim()) return;
+  const handleAddEvent = useCallback(() => {
+    setEvents((prev) => [...prev, createEmptyEvent()]);
+  }, []);
 
-    const icsContent = generateICS({
-      title: title.trim(),
-      location: location.trim(),
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-    });
+  const validEvents = events.filter((ev) => ev.title.trim().length > 0);
+  const hasValidEvents = validEvents.length > 0;
 
-    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${title.trim().replace(/\s+/g, "_")}.ics`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, [title, location, startDate, startTime, endDate, endTime]);
+  const handleDownloadAll = useCallback(() => {
+    if (!hasValidEvents) return;
+    downloadICS(validEvents);
+  }, [hasValidEvents, validEvents]);
 
-  const isValid = title.trim().length > 0;
+  const handleShare = useCallback(() => {
+    if (!hasValidEvents) return;
+    const encoded = encodeEventsToURL(validEvents);
+    const link = `${window.location.origin}${window.location.pathname}?d=${encoded}`;
+    setShareLink(link);
+    setCopied(false);
+  }, [hasValidEvents, validEvents]);
+
+  const handleCopyLink = useCallback(async () => {
+    if (!shareLink) return;
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+      const input = document.createElement("input");
+      input.value = shareLink;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }, [shareLink]);
+
+  const handleKakaoShare = useCallback(() => {
+    if (!shareLink) return;
+    const text = `📅 일정이 공유되었습니다!\n\n${validEvents
+      .map(
+        (ev) =>
+          `• ${ev.title}${ev.location ? ` (${ev.location})` : ""}\n  ${ev.startDate} ${ev.startTime} ~ ${ev.endDate} ${ev.endTime}`
+      )
+      .join("\n")}\n\n👉 아래 링크에서 캘린더에 추가하세요:\n${shareLink}`;
+
+    // Try Kakao sharing via URL scheme, fallback to clipboard
+    const kakaoLink = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(text)}`;
+
+    // Use web share API if available (mobile)
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "캘린더 일정 공유",
+          text: validEvents.map((ev) => ev.title).join(", "),
+          url: shareLink,
+        })
+        .catch(() => {
+          window.open(kakaoLink, "_blank", "noopener");
+        });
+    } else {
+      window.open(kakaoLink, "_blank", "noopener");
+    }
+  }, [shareLink, validEvents]);
+
+  // If viewing shared events
+  if (sharedEvents) {
+    return <SharedView events={sharedEvents} />;
+  }
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+        <div className="mb-6">
           <h1 className="text-2xl font-bold text-center mb-1">캘린더 공유</h1>
-          <p className="text-sm text-gray-500 text-center mb-6">
-            일정을 입력하고 .ics 파일로 내보내세요
+          <p className="text-sm text-gray-500 text-center">
+            일정을 입력하고 .ics 파일로 내보내거나 공유하세요
           </p>
-
-          <div className="space-y-4">
-            {/* 일정 제목 */}
-            <div>
-              <label htmlFor="title" className="block text-sm font-medium mb-1">
-                일정 제목 <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="title"
-                type="text"
-                placeholder="예: 팀 회의"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* 장소 */}
-            <div>
-              <label htmlFor="location" className="block text-sm font-medium mb-1">
-                장소
-              </label>
-              <input
-                id="location"
-                type="text"
-                placeholder="예: 회의실 A"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            {/* 시작 날짜/시간 */}
-            <div>
-              <label className="block text-sm font-medium mb-1">시작</label>
-              <div className="flex gap-2">
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => handleStartDateChange(e.target.value)}
-                  className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <input
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => handleStartTimeChange(e.target.value)}
-                  className="w-28 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            {/* 종료 날짜/시간 */}
-            <div>
-              <label className="block text-sm font-medium mb-1">종료</label>
-              <div className="flex gap-2">
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <input
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="w-28 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            {/* 다운로드 버튼 */}
-            <button
-              onClick={handleDownload}
-              disabled={!isValid}
-              className="w-full mt-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-            >
-              캘린더에 추가 (.ics 다운로드)
-            </button>
-          </div>
         </div>
 
-        <p className="text-xs text-gray-400 text-center mt-4">
+        {/* Event Cards */}
+        <div className="space-y-4">
+          {events.map((ev, i) => (
+            <EventCard
+              key={ev.id}
+              event={ev}
+              index={i}
+              total={events.length}
+              onChange={handleEventChange}
+              onRemove={handleRemoveEvent}
+            />
+          ))}
+        </div>
+
+        {/* Add Event Button */}
+        <button
+          onClick={handleAddEvent}
+          className="w-full mt-4 rounded-2xl border-2 border-dashed border-gray-300 py-3 text-sm font-medium text-gray-500 hover:border-blue-400 hover:text-blue-500 transition-colors cursor-pointer"
+        >
+          + 일정 추가
+        </button>
+
+        {/* Action Buttons */}
+        <div className="mt-6 space-y-3">
+          <button
+            onClick={handleDownloadAll}
+            disabled={!hasValidEvents}
+            className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            {validEvents.length > 1
+              ? `모두 다운로드 (${validEvents.length}개 일정)`
+              : "캘린더에 추가 (.ics 다운로드)"}
+          </button>
+
+          <button
+            onClick={handleShare}
+            disabled={!hasValidEvents}
+            className="w-full rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            공유 링크 생성
+          </button>
+        </div>
+
+        {/* Share Link Panel */}
+        {shareLink && (
+          <div className="mt-4 bg-white rounded-2xl shadow-lg p-5 space-y-3">
+            <p className="text-sm font-medium text-gray-700">공유 링크가 생성되었습니다</p>
+            <div className="bg-gray-50 rounded-lg p-3 break-all text-xs text-gray-600 max-h-24 overflow-y-auto">
+              {shareLink}
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleCopyLink}
+                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer"
+              >
+                {copied ? "복사됨!" : "링크 복사"}
+              </button>
+              <button
+                onClick={handleKakaoShare}
+                className="flex-1 rounded-lg bg-[#FEE500] px-3 py-2 text-sm font-semibold text-[#3C1E1E] hover:bg-[#FDD800] transition-colors cursor-pointer"
+              >
+                카톡으로 공유
+              </button>
+            </div>
+          </div>
+        )}
+
+        <p className="text-xs text-gray-400 text-center mt-6">
           다운로드한 .ics 파일을 Google Calendar, Apple Calendar 등에서 열 수 있습니다.
         </p>
       </div>
