@@ -120,16 +120,24 @@ function downloadICS(events: EventData[]) {
   const icsContent = generateICSMultiple(events);
   const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download =
+  const filename =
     events.length === 1
       ? `${events[0].title.trim().replace(/\s+/g, "_")}.ics`
       : "calendar-events.ics";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+
+  // iOS Safari blocks programmatic <a> clicks — use window.open fallback
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isIOS) {
+    window.open(url, "_blank");
+  } else {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 }
 
 function formatDateTime(date: string, time: string): string {
