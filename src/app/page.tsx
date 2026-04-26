@@ -140,6 +140,28 @@ function downloadICS(events: EventData[]) {
   }
 }
 
+function toGoogleCalDateString(date: string, time: string): string {
+  return date.replace(/-/g, "") + "T" + time.replace(/:/g, "") + "00";
+}
+
+function generateGoogleCalendarURL(event: EventData): string {
+  const start = toGoogleCalDateString(event.startDate, event.startTime);
+  const end = toGoogleCalDateString(event.endDate, event.endTime);
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: event.title,
+    dates: `${start}/${end}`,
+  });
+  if (event.location) {
+    params.set("location", event.location);
+  }
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+function openInCalendar(event: EventData) {
+  window.open(generateGoogleCalendarURL(event), "_blank", "noopener");
+}
+
 function formatDateTime(date: string, time: string): string {
   const d = new Date(`${date}T${time}`);
   return d.toLocaleDateString("ko-KR", {
@@ -285,7 +307,7 @@ function SharedView({ events }: { events: EventData[] }) {
             {events.map((ev, i) => (
               <div
                 key={ev.id}
-                className="border border-gray-200 rounded-xl p-4 space-y-1"
+                className="border border-gray-200 rounded-xl p-4 space-y-2"
               >
                 <h3 className="font-semibold text-gray-900">
                   {events.length > 1 && (
@@ -302,20 +324,28 @@ function SharedView({ events }: { events: EventData[] }) {
                 <p className="text-sm text-gray-500">
                   → {formatDateTime(ev.endDate, ev.endTime)}
                 </p>
+                <button
+                  onClick={() => openInCalendar(ev)}
+                  className="w-full mt-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors cursor-pointer"
+                >
+                  캘린더에 추가
+                </button>
               </div>
             ))}
           </div>
 
           <button
             onClick={() => downloadICS(events)}
-            className="w-full mt-6 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors cursor-pointer"
+            className="w-full mt-6 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
           >
-            내 캘린더에 추가 (.ics 다운로드)
+            .ics 파일로 모두 받기
           </button>
         </div>
 
         <p className="text-xs text-gray-400 text-center mt-4">
-          다운로드한 .ics 파일을 Google Calendar, Apple Calendar 등에서 열 수 있습니다.
+          &quot;캘린더에 추가&quot; 버튼은 Google 캘린더로 연결되며,
+          <br />
+          .ics 파일은 Apple 캘린더 등에서 열 수 있습니다.
         </p>
       </div>
     </main>
@@ -364,6 +394,16 @@ export default function Home() {
   const handleDownloadAll = useCallback(() => {
     if (!hasValidEvents) return;
     downloadICS(validEvents);
+  }, [hasValidEvents, validEvents]);
+
+  const handleAddToCalendar = useCallback(() => {
+    if (!hasValidEvents) return;
+    if (validEvents.length === 1) {
+      openInCalendar(validEvents[0]);
+    } else {
+      // Multi-event: open each in a separate tab
+      validEvents.forEach((ev) => openInCalendar(ev));
+    }
   }, [hasValidEvents, validEvents]);
 
   const handleShare = useCallback(() => {
@@ -461,13 +501,21 @@ export default function Home() {
         {/* Action Buttons */}
         <div className="mt-6 space-y-3">
           <button
-            onClick={handleDownloadAll}
+            onClick={handleAddToCalendar}
             disabled={!hasValidEvents}
             className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             {validEvents.length > 1
-              ? `모두 다운로드 (${validEvents.length}개 일정)`
-              : "캘린더에 추가 (.ics 다운로드)"}
+              ? `캘린더에 모두 추가 (${validEvents.length}개)`
+              : "캘린더에 추가"}
+          </button>
+
+          <button
+            onClick={handleDownloadAll}
+            disabled={!hasValidEvents}
+            className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            .ics 파일로 다운로드
           </button>
 
           <button
@@ -504,7 +552,9 @@ export default function Home() {
         )}
 
         <p className="text-xs text-gray-400 text-center mt-6">
-          다운로드한 .ics 파일을 Google Calendar, Apple Calendar 등에서 열 수 있습니다.
+          &quot;캘린더에 추가&quot;는 Google 캘린더로 바로 연결됩니다.
+          <br />
+          .ics 파일은 Apple 캘린더 등에서 열 수 있습니다.
         </p>
       </div>
     </main>
