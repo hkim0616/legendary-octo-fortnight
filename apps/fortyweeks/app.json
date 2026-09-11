@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "40weeks",
+    "slug": "fortyweeks",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "fortyweeks",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/images/icon.png",
+    "platforms": ["ios", "android", "web"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.hkim0616.fortyweeks",
+      "infoPlist": {
+        "CFBundleDevelopmentRegion": "ko_KR",
+        "CFBundleLocalizations": ["ko"],
+        "CFBundleAllowMixedLocalizations": false
+      }
+    },
+    "android": {
+      "package": "com.hkim0616.fortyweeks",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#E6F4FE",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 76
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#E6F4FE",
+          "defaultChannel": "default"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "timezone": "Asia/Seoul",
+      "locale": "ko-KR"
+    }
+  }
+}
